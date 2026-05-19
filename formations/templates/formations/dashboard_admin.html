@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Tableau de bord administrateur</h1>
+
+<div class="actions-row">
+    <a href="{% url 'ajouter_formation' %}" class="button-link primary">Ajouter une formation</a>
+</div>
+
+<div class="card">
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Duree</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for formation in formations %}
+        <tr>
+            <td>{{ formation.titre }}</td>
+            <td>{{ formation.duree }}</td>
+            <td>{{ formation.prix }} DH</td>
+            <td class="actions-row">
+                <a href="{% url 'modifier_formation' formation.id %}" class="button-link">Modifier</a>
+
+                <form method="post" action="{% url 'supprimer_formation' formation.id %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

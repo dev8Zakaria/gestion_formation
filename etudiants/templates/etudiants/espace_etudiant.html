@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Espace Etudiant</h1>
+
+<div class="stack">
+    <section class="card section">
+        <h2>Mes formations rejointes</h2>
+
+        {% if formations_rejointes %}
+            <table>
+                <tr>
+                    <th>Titre</th>
+                    <th>Duree</th>
+                    <th>Prix</th>
+                </tr>
+                {% for formation in formations_rejointes %}
+                <tr>
+                    <td>{{ formation.titre }}</td>
+                    <td>{{ formation.duree }}</td>
+                    <td>{{ formation.prix }} DH</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <span class="empty-state">Vous n'etes inscrit a aucune formation.</span>
+        {% endif %}
+    </section>
+
+    <section class="card section">
+        <h2>Toutes les formations disponibles</h2>
+
+        <table>
+            <tr>
+                <th>Titre</th>
+                <th>Duree</th>
+                <th>Prix</th>
+                <th>Action</th>
+            </tr>
+
+            {% for formation in formations %}
+            <tr>
+                <td>{{ formation.titre }}</td>
+                <td>{{ formation.duree }}</td>
+                <td>{{ formation.prix }} DH</td>
+                <td>
+                    {% if formation.id in formations_rejointes_ids %}
+                        <span class="status-ok">Deja inscrit</span>
+                    {% else %}
+                        <a href="{% url 'inscrire_formation' formation.id %}" class="button-link">
+                            S'inscrire
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+</div>
+
+{% endblock %}

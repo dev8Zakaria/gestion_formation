@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Liste des formations</h1>
+<p>Consultez toutes les formations actuellement disponibles.</p>
+
+<div class="card">
+    <table>
+        <tr>
+            <th>Titre</th>
+            <th>Duree</th>
+            <th>Prix</th>
+        </tr>
+
+        {% for formation in formations %}
+        <tr>
+            <td>{{ formation.titre }}</td>
+            <td>{{ formation.duree }}</td>
+            <td>{{ formation.prix }} DH</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

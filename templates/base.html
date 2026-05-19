@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Formations</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --panel: #ffffff;
+            --panel-soft: #f9fbff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary: #1d4ed8;
+            --primary-dark: #1e40af;
+            --border: #dbe3ef;
+            --success: #dff6e8;
+            --success-text: #166534;
+            --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 30%),
+                linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+        }
+
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 32px 20px 48px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(219, 227, 239, 0.9);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links a,
+        .nav-links button,
+        .button-link,
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links button:hover,
+        .button-link:hover,
+        button:hover {
+            transform: translateY(-1px);
+            border-color: #bfd0f8;
+            box-shadow: 0 10px 24px rgba(29, 78, 216, 0.12);
+        }
+
+        .nav-links a.active,
+        .button-link.primary,
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .inline-form {
+            display: inline-flex;
+            margin: 0;
+        }
+
+        .content {
+            margin-top: 24px;
+            padding: 32px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) + 4px);
+            box-shadow: var(--shadow);
+        }
+
+        h1,
+        h2 {
+            margin-top: 0;
+            color: #0f172a;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            margin-bottom: 16px;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        form p {
+            margin: 0 0 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        input,
+        select,
+        textarea {
+            width: min(100%, 420px);
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            font-size: 1rem;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .helptext,
+        ul.errorlist {
+            display: block;
+            margin: 8px 0 0;
+            padding: 0;
+            list-style: none;
+            font-size: 0.92rem;
+        }
+
+        .helptext {
+            color: var(--muted);
+        }
+
+        ul.errorlist {
+            color: #b91c1c;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--panel-soft);
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .section {
+            margin-top: 28px;
+        }
+
+        .section:first-of-type {
+            margin-top: 0;
+        }
+
+        .stack {
+            display: grid;
+            gap: 24px;
+        }
+
+        .card {
+            padding: 24px;
+            background: var(--panel-soft);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        .empty-state,
+        .status-ok {
+            display: inline-flex;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .status-ok {
+            background: var(--success);
+            color: var(--success-text);
+        }
+
+        .actions-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding: 20px 14px 32px;
+            }
+
+            .topbar,
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            th,
+            td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Gestion des formations</div>
+
+            <nav class="nav-links">
+                <a href="{% url 'liste_formations' %}" class="{% if request.resolver_match.url_name == 'liste_formations' %}active{% endif %}">Formations</a>
+
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard_admin' %}" class="{% if request.resolver_match.url_name == 'dashboard_admin' or request.resolver_match.url_name == 'ajouter_formation' or request.resolver_match.url_name == 'modifier_formation' or request.resolver_match.url_name == 'supprimer_formation' %}active{% endif %}">Dashboard Admin</a>
+                    {% else %}
+                        <a href="{% url 'espace_etudiant' %}" class="{% if request.resolver_match.url_name == 'espace_etudiant' %}active{% endif %}">Espace Etudiant</a>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'logout' %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit">Deconnexion</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">Connexion</a>
+                    <a href="{% url 'inscription_etudiant' %}" class="{% if request.resolver_match.url_name == 'inscription_etudiant' %}active{% endif %}">Inscription Etudiant</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

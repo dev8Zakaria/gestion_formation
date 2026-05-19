@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <h2>Connexion</h2>
+    <p>Connectez-vous pour acceder a votre espace et gerer vos inscriptions.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <p>
+        Pas encore de compte ?
+        <a href="{% url 'inscription_etudiant' %}">S'inscrire</a>
+    </p>
+</div>
+
+{% endblock %}
